@@ -1,0 +1,23 @@
+# Systemd unit file for tomcat
+[Unit]
+Description=Apache Tomcat Web Application Container
+After=syslog.target network.target
+
+[Service]
+Type=forking
+
+Environment=JAVA_HOME={{ tomcat_java_home }}
+Environment=CATALINA_PID={{ tomcat_install_path }}/{{ tomcat_service_name }}/temp/tomcat.pid
+Environment=CATALINA_HOME={{ tomcat_install_path }}/{{ tomcat_service_name }}
+Environment=CATALINA_BASE={{ tomcat_install_path }}/{{ tomcat_service_name }}
+Environment='CATALINA_OPTS=-Xms{{ tomcat_jvm_memory_percentage_xms*ansible_memtotal_mb//100 }}M -Xmx{{ tomcat_jvm_memory_percentage_xmx*ansible_memtotal_mb//100 }}M -server -XX:+UseParallelGC {% if tomcat_debug_mode == True %}-Xdebug -Xrunjdwp:transport=dt_socket,address={{ tomcat_port_debug }},server=y,suspend=n{% endif %}'
+Environment='JAVA_OPTS=-Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom'
+
+ExecStart={{ tomcat_install_path }}/{{ tomcat_service_name }}/bin/startup.sh
+ExecStop={{ tomcat_install_path }}/{{ tomcat_service_name }}/bin/shutdown.sh
+
+User={{ tomcat_user }}
+Group={{ tomcat_group }}
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,64 @@
+---
+# tasks file for tomcat-ansible-role
+
+- name: Setup server.xml
+  template:
+    src: "tomcat-server-{{ '.'.join(tomcat_version.split('.')[:2]) }}.xml.j2"
+    dest: "{{ tomcat_install_path }}/apache-tomcat-{{ tomcat_version }}/conf/server.xml"
+  notify: restart tomcat
+
+- name: Set fact of user roles to be enabled
+  set_fact:
+    tomcat_user_roles: "{{ (tomcat_user_roles + item.roles.split(',')|list)|unique }}"
+    #tomcat_user_roles: "{{ (tomcat_user_roles + item.roles.split(','))|list|unique }}"
+  with_items:
+    - "{{ tomcat_users }}"
+
+- name: Setup tomcat-users.xml
+  template:
+    src: "tomcat-users-{{ '.'.join(tomcat_version.split('.')[:2]) }}.xml.j2"
+    dest: "{{ tomcat_install_path }}/apache-tomcat-{{ tomcat_version }}/conf/tomcat-users.xml"
+  notify: restart tomcat
+
+- name: Ensure permissions
+  shell: find {{ tomcat_install_path }}/apache-tomcat-{{ tomcat_version }} \( ! -user {{ tomcat_user }} -o ! -group {{ tomcat_group }} \)
+  register: find_perm
+  changed_when: false
+
+- name: Ensure permissions
+  file:
+    path: "{{ item }}"
+    owner: "{{ tomcat_user }}"
+    group: "{{ tomcat_group }}"
+  with_items: "{{ find_perm.stdout_lines | default([]) }}"
+
+- name: Create symlink {{ tomcat_install_path }}/apache-tomcat-{{ tomcat_version }} to {{ tomcat_install_path }}/{{ tomcat_service_name }}
+  file:
+    src: "{{ tomcat_install_path }}/apache-tomcat-{{ tomcat_version }}"
+    dest: "{{ tomcat_install_path }}/{{ tomcat_service_name }}"
+    state: link
+
+- name: Configure access to Manager app (from localhost only or from anywhere)
+  template:
+    src: manager-context.xml.j2
+    dest: "{{ tomcat_install_path }}/apache-tomcat-{{ tomcat_version }}/webapps/manager/META-INF/context.xml"
+  notify: restart tomcat
+
+- name: Configure access to Host Manager (from localhost only or from anywhere)
+  template:
+    src: host-manager-context.xml.j2
+    dest: "{{ tomcat_install_path }}/apache-tomcat-{{ tomcat_version }}/webapps/host-manager/META-INF/context.xml"
+  notify: restart tomcat
+
+- name: Configure service file {{ tomcat_service_name }}.service
+  template:
+    src: tomcat.service.j2
+    dest: /usr/lib/systemd/system/{{ tomcat_service_name }}.service
+  notify: restart tomcat
+
+- name: Enable tomcat service on startup
+  systemd:
+    name: "{{ tomcat_service_name}}"
+    enabled: yes
+    daemon_reload: yes
+  when: tomcat_service_enabled_on_startup == True

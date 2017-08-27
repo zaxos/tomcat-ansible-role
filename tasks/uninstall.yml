@@ -1,0 +1,60 @@
+---
+# tasks file for tomcat-ansible-role
+
+- name: (uninstall) Check if tomcat service is installed
+  stat:
+    path: /usr/lib/systemd/system/{{ tomcat_service_name }}.service
+  register: service_installed
+
+- name: (uninstall) Stop tomcat service if running
+  systemd:
+    name: "{{ tomcat_service_name}}"
+    enabled: no
+    state: stopped
+  when: service_installed.stat.exists
+
+- name: (uninstall) Remove service file {{ tomcat_service_name }}.service
+  file:
+    path: /usr/lib/systemd/system/{{ tomcat_service_name }}.service
+    state: absent
+
+- name: (uninstall) Perform systemctl daemon-reload
+  command: systemctl daemon-reload
+  changed_when: false
+
+- name: (uninstall) Remove symlink {{ tomcat_install_path }}/{{ tomcat_service_name }}
+  file:
+    path: "{{ tomcat_install_path }}/{{ tomcat_service_name }}"
+    state: absent
+
+- name: (uninstall) Create backup archive before deletion at {{ tomcat_install_path }}/tomcat-backup-XXX.tgz
+  archive:
+    path: "{{ tomcat_install_path }}/apache-tomcat-{{ tomcat_version }}"
+    dest: "{{ tomcat_install_path }}/tomcat-backup-{{ lookup('pipe','date +%Y%m%d%H%M%S') }}.tgz"
+  when: tomcat_uninstall_create_backup
+
+- name: (uninstall) Remove {{ tomcat_install_path }}/apache-tomcat-{{ tomcat_version }}
+  file:
+    path: "{{ tomcat_install_path }}/apache-tomcat-{{ tomcat_version }}"
+    state: absent
+
+- name: (uninstall) Delete user {{ tomcat_user }}
+  user:
+    name: "{{ tomcat_user }}"
+    groups: "{{ tomcat_group }}"
+    state: absent 
+    force: yes
+  when: tomcat_uninstall_remove_all or tomcat_uninstall_remove_user
+
+- name: (uninstall) Delete group {{ tomcat_group }}
+  group:
+    name: "{{ tomcat_group }}"
+    state: absent
+  when: tomcat_uninstall_remove_all or tomcat_uninstall_remove_group
+
+- name: (uninstall) Uninstall Java
+  yum:
+    name: "{{ item.package }}"
+    state: absent
+  with_items: "{{ tomcat_java_packages_EL }}"
+  when: tomcat_uninstall_remove_all or tomcat_uninstall_remove_java 
