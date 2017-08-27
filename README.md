@@ -57,9 +57,9 @@ You can set the minimum and maximum memory heap size with the following JVM -Xms
   * `tomcat_jvm_memory_percentage_xms`: 15
   * `tomcat_jvm_memory_percentage_xmx`: 55   
 - `tomcat_allow_manager_access_only_from_localhost`: False   
-If set to "True", tomcat manager app will be accessible only from localhost for security reasons. This behaviour is default only in Tomcat 8.5.
+If set to "True", tomcat manager app will be accessible only from localhost for security reasons. This behavior is default only in Tomcat 8.5.
 - `tomcat_allow_host_manager_access_only_from_localhost`: False   
-If set to "True", tomcat host manager app will be accessible only from localhost for security reasons. This behaviour is default only in Tomcat 8.5.
+If set to "True", tomcat host manager app will be accessible only from localhost for security reasons. This behavior is default only in Tomcat 8.5.
 - `tomcat_users`: List of tomcat users to be created. See example for the expected format.
 - `tomcat_debug_mode`: False   
 Change it to "True" in order to configure tomcat to allow remote debugging. Default debug port is set to tcp/8000 (you can change it through the corresponding variable).
@@ -92,7 +92,7 @@ In case of uninstallation:
 By default, in a better safe than sorry basis, a backup tar archive will be created at "tomcat_install_path" before deletion.
 - `tomcat_uninstall_remove_java`: False   
 Change it to "True" to uninstall Java after tomcat is uninstalled.
-- By default, tomcat user and group will be removed . Change to "False" to preserve them after tomcat is uninstalled.
+- By default, tomcat user and group will be removed. Change to "False" to preserve them after tomcat is uninstalled.
   * `tomcat_uninstall_remove_user`: True
   * `tomcat_uninstall_remove_group`: True
 - `tomcat_uninstall_remove_all`: False   
