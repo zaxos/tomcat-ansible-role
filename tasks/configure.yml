@@ -10,7 +10,6 @@
 - name: Set fact of user roles to be enabled
   set_fact:
     tomcat_user_roles: "{{ (tomcat_user_roles + item.roles.split(',')|list)|unique }}"
-    #tomcat_user_roles: "{{ (tomcat_user_roles + item.roles.split(','))|list|unique }}"
   with_items:
     - "{{ tomcat_users }}"
 
