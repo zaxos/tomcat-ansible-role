@@ -22,6 +22,11 @@
   command: systemctl daemon-reload
   changed_when: false
 
+- name: Check if tomcat is already uninstalled
+  stat:
+    path: "{{ tomcat_install_path }}/apache-tomcat-{{ tomcat_version }}"
+  register: is_uninstalled
+
 - name: (uninstall) Remove symlink {{ tomcat_install_path }}/{{ tomcat_service_name }}
   file:
     path: "{{ tomcat_install_path }}/{{ tomcat_service_name }}"
@@ -31,7 +36,7 @@
   archive:
     path: "{{ tomcat_install_path }}/apache-tomcat-{{ tomcat_version }}"
     dest: "{{ tomcat_install_path }}/tomcat-backup-{{ lookup('pipe','date +%Y%m%d%H%M%S') }}.tgz"
-  when: tomcat_uninstall_create_backup
+  when: tomcat_uninstall_create_backup and is_uninstalled.stat.exists
 
 - name: (uninstall) Remove {{ tomcat_install_path }}/apache-tomcat-{{ tomcat_version }}
   file:
