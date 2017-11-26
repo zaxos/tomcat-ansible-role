@@ -13,6 +13,7 @@ Requirements
   * 7.0
   * 8.0
   * 8.5
+  * 9.0 (9.0.1 or later)
 * CentOS/RHEL 7
 * SELinux disabled
 
