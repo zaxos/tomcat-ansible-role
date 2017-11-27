@@ -77,8 +77,7 @@ For better security, auto-deployment should be disabled and web applications sho
   * If set to "True", webapps subdirectory is owned by tomcat with group tomcat.
   * If set to "False", webapps subdirectory is owned by root with group tomcat.  
 - `tomcat_permissions_ensure_on_every_run`: True  
-If set to "True", file permissions are ensured on every playbook run. Default is "True".
-
+If set to "True", file permissions are ensured on every playbook run. If set to "False", file permissions are set only when tomcat is installed (on first playbook run).
 
 Tomcat ports:
 - `tomcat_port_connector`: 8080
