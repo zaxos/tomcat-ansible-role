@@ -1,0 +1,47 @@
+---
+# tasks file for tomcat-ansible-role
+
+- name: Set root directory owner/group for production installation
+  file:
+    path: "{{ tomcat_install_path }}/apache-tomcat-{{ tomcat_version }}"
+    owner: root
+    group: "{{ tomcat_group }}"
+
+- name: Set recursively directories owner/group for production installation
+  file:
+    path: "{{ tomcat_install_path }}/apache-tomcat-{{ tomcat_version }}/{{ item }}"
+    owner: root
+    group: "{{ tomcat_group }}"
+    recurse: yes
+  with_items:
+    - bin
+    - conf
+    - lib
+
+- name: Set recursively directories owner/group for production installation
+  file:
+    path: "{{ tomcat_install_path }}/apache-tomcat-{{ tomcat_version }}/{{ item }}"
+    owner: "{{ tomcat_user }}"
+    group: "{{ tomcat_group }}"
+    recurse: yes
+  with_items:
+    - logs
+    - temp
+    - work
+
+- name: Set recursively webapps directory owner/group for production installation
+  file:
+    path: "{{ tomcat_install_path }}/apache-tomcat-{{ tomcat_version }}/webapps"
+    owner: "{% if tomcat_webapps_auto_deployment %}{{ tomcat_user }}{% else %}root{% endif %}"
+    group: "{{ tomcat_group }}"
+    recurse: yes
+
+- name: Set directories permissions for production installation
+  command: find {{ tomcat_install_path }}/apache-tomcat-{{ tomcat_version }} -type d -exec chmod -c 2750 {} \;
+  register: find_chmod_result
+  changed_when: 'find_chmod_result.stdout != ""'
+
+- name: Set files permissions for production installation
+  command: find {{ tomcat_install_path }}/apache-tomcat-{{ tomcat_version }} -type f -exec chmod -c u+rw,g+r,g-w,o-rwx {} \;
+  register: find_chmod_result
+  changed_when: 'find_chmod_result.stdout != ""'

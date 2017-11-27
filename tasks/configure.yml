@@ -19,18 +19,6 @@
     dest: "{{ tomcat_install_path }}/apache-tomcat-{{ tomcat_version }}/conf/tomcat-users.xml"
   notify: restart tomcat
 
-- name: Ensure permissions
-  shell: find {{ tomcat_install_path }}/apache-tomcat-{{ tomcat_version }} \( ! -user {{ tomcat_user }} -o ! -group {{ tomcat_group }} \)
-  register: find_perm
-  changed_when: false
-
-- name: Ensure permissions
-  file:
-    path: "{{ item }}"
-    owner: "{{ tomcat_user }}"
-    group: "{{ tomcat_group }}"
-  with_items: "{{ find_perm.stdout_lines | default([]) }}"
-
 - name: Create symlink {{ tomcat_install_path }}/apache-tomcat-{{ tomcat_version }} to {{ tomcat_install_path }}/{{ tomcat_service_name }}
   file:
     src: "{{ tomcat_install_path }}/apache-tomcat-{{ tomcat_version }}"
@@ -49,6 +37,18 @@
     dest: "{{ tomcat_install_path }}/apache-tomcat-{{ tomcat_version }}/webapps/host-manager/META-INF/context.xml"
   notify: restart tomcat
 
+- name: Set production permissions
+  include: set-production-permissions.yml
+  when: >
+    (tomcat_installed|changed or tomcat_permissions_ensure_on_every_run) and
+    tomcat_permissions_production
+
+- name: Set non production permissions
+  include: set-non-production-permissions.yml
+  when: >
+    (tomcat_installed|changed or tomcat_permissions_ensure_on_every_run) and
+    tomcat_permissions_production == False
+
 - name: Configure service file {{ tomcat_service_name }}.service
   template:
     src: tomcat.service.j2
@@ -58,6 +58,5 @@
 - name: Enable tomcat service on startup
   systemd:
     name: "{{ tomcat_service_name}}"
-    enabled: yes
+    enabled: "{% if tomcat_service_enabled_on_startup %}yes{% else %}no{% endif %}"
     daemon_reload: yes
-  when: tomcat_service_enabled_on_startup == True

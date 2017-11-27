@@ -1,0 +1,19 @@
+---
+# tasks file for tomcat-ansible-role
+
+- name: Set owner and group for non-production installation
+  file:
+    path: "{{ tomcat_install_path }}/apache-tomcat-{{ tomcat_version }}"
+    owner: "{{ tomcat_user }}"
+    group: "{{ tomcat_group }}"
+    recurse: yes
+
+- name: Set directories permissions for non-production installation
+  command: find {{ tomcat_install_path }}/apache-tomcat-{{ tomcat_version }} -type d -exec chmod -c 2775 {} \;
+  register: find_chmod_result
+  changed_when: 'find_chmod_result.stdout != ""'
+
+- name: Set files permissions for non-production installation
+  command: find {{ tomcat_install_path }}/apache-tomcat-{{ tomcat_version }} -type f -exec chmod -c u+rw,g+rw,o+r,o-wx {} \;
+  register: find_chmod_result
+  changed_when: 'find_chmod_result.stdout != ""'

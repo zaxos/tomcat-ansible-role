@@ -45,7 +45,7 @@
     src: "{{ tomcat_temp_download_path }}/apache-tomcat-{{ tomcat_version }}.tar.gz"
     dest: "{{ tomcat_install_path }}"
     remote_src: True
-    owner: "{{ tomcat_user }}"
+    owner: "{% if tomcat_permissions_production %}root{% else %}{{ tomcat_user }}{% endif %}"
     group: "{{ tomcat_group }}"
     creates: "{{ tomcat_install_path }}/apache-tomcat-{{ tomcat_version }}"
   register: tomcat_installed

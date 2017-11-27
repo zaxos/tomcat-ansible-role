@@ -28,7 +28,9 @@ Example Playbook
 ```yaml
 - hosts: servers
   vars:
-    tomcat_version: 8.5.20
+    tomcat_version: 8.5.23
+    
+    tomcat_permissions_production: True
     
     tomcat_users:
       - username: "tomcat"
@@ -58,12 +60,25 @@ You can set the minimum and maximum memory heap size with the following JVM -Xms
   * `tomcat_jvm_memory_percentage_xms`: 15
   * `tomcat_jvm_memory_percentage_xmx`: 55   
 - `tomcat_allow_manager_access_only_from_localhost`: False   
-If set to "True", tomcat manager app will be accessible only from localhost for security reasons. This behavior is default only in Tomcat 8.5.
+If set to "True", tomcat manager app will be accessible only from localhost for security reasons. (This behavior is default for Tomcat 8.5 and 9.0)
 - `tomcat_allow_host_manager_access_only_from_localhost`: False   
-If set to "True", tomcat host manager app will be accessible only from localhost for security reasons. This behavior is default only in Tomcat 8.5.
+If set to "True", tomcat host manager app will be accessible only from localhost for security reasons. (This behavior is default for Tomcat 8.5 and 9.0)
 - `tomcat_users`: List of tomcat users to be created. See example for the expected format.
 - `tomcat_debug_mode`: False   
 Change it to "True" in order to configure tomcat to allow remote debugging. Default debug port is set to tcp/8000 (you can change it through the corresponding variable).
+
+File permissions:
+- `tomcat_permissions_production`: False  
+For production installation, set this variable to "True" for more strict security. For development or low-security/more-ease installation, set this variable to "False". Default is "False".  
+  * If set to "True", all tomcat files are owned by root with group tomcat. Owner has read/write privileges, group only has read and world has no permissions. The exceptions are the logs, temp and work directory that are owned by the tomcat user rather than root.  
+  * If set to "False", all tomcat files are owned by tomcat with group tomcat. Owner and group has read/write privileges and world only has read permissions.
+- `tomcat_webapps_auto_deployment`: True  
+For better security, auto-deployment should be disabled and web applications should be deployed as exploded directories. If auto-deployment is disabled, set this to "False". This variable makes sense only for production installation (if tomcat_permissions_production is "True"). Default is "True".  
+  * If set to "True", webapps subdirectory is owned by tomcat with group tomcat.
+  * If set to "False", webapps subdirectory is owned by root with group tomcat.  
+- `tomcat_permissions_ensure_on_every_run`: True  
+If set to "True", file permissions are ensured on every playbook run. Default is "True".
+
 
 Tomcat ports:
 - `tomcat_port_connector`: 8080
@@ -87,8 +102,8 @@ Optional variables (by default undefined):
   * `tomcat_group_gid`: 500
 
 In case of uninstallation:
-- To uninstall tomcat that was installed using this role, set the following variable to "absent". Default value is "present".
-  * `tomcat_state`: absent
+- `tomcat_state`: absent
+  * To uninstall tomcat that was installed using this role, set this variable to "absent". Default value is "present".
 - `tomcat_uninstall_create_backup`: True   
 By default, in a better safe than sorry basis, a backup tar archive will be created at "tomcat_install_path" before deletion.
 - `tomcat_uninstall_remove_java`: False   

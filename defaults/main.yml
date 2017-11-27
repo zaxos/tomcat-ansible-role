@@ -22,6 +22,10 @@ tomcat_service_name: tomcat
 tomcat_jvm_memory_percentage_xms: 15
 tomcat_jvm_memory_percentage_xmx: 55
 
+tomcat_permissions_production: False
+tomcat_webapps_auto_deployment: True
+tomcat_permissions_ensure_on_every_run: True
+
 tomcat_allow_manager_access_only_from_localhost: False
 tomcat_allow_host_manager_access_only_from_localhost: False
 

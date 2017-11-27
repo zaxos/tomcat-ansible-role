@@ -22,7 +22,7 @@
   command: systemctl daemon-reload
   changed_when: false
 
-- name: Check if tomcat is already uninstalled
+- name: (uninstall) Check if tomcat is already uninstalled
   stat:
     path: "{{ tomcat_install_path }}/apache-tomcat-{{ tomcat_version }}"
   register: is_uninstalled
