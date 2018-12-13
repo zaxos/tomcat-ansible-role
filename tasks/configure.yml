@@ -47,7 +47,7 @@
   include: set-non-production-permissions.yml
   when: >
     (tomcat_installed is changed or tomcat_permissions_ensure_on_every_run) and
-    tomcat_permissions_production == False
+    not tomcat_permissions_production
 
 - name: Configure service file {{ tomcat_service_name }}.service
   template:
@@ -57,6 +57,6 @@
 
 - name: Enable tomcat service on startup
   systemd:
-    name: "{{ tomcat_service_name}}"
+    name: "{{ tomcat_service_name }}"
     enabled: "{% if tomcat_service_enabled_on_startup %}yes{% else %}no{% endif %}"
     daemon_reload: yes
