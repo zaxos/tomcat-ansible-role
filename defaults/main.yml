@@ -10,7 +10,7 @@ tomcat_java_version: 1.8
 tomcat_java_home: /usr/lib/jvm/jre
 
 tomcat_java_packages_EL:
- - {package: "java-{{ tomcat_java_version }}.0-openjdk"}
+ - {package: "java-{{ tomcat_java_version }}{% if '1.' in tomcat_java_version|string %}.0{% endif %}-openjdk"}
 
 tomcat_downloadURL: https://archive.apache.org/dist
 

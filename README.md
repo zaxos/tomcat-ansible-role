@@ -52,7 +52,7 @@ Some variables that require review:
 - `tomcat_install_java`: True   
 By default OpenJDK Java will be installed. Change it to "False" if you don't want OpenJDK Java to be installed by this role.
 - `tomcat_java_version`: 1.8   
-OpenJDK Java version to be installed. Default is "1.8".
+OpenJDK Java version to be installed. Default is "1.8". Currently, latest OpenJDK Java version is "11".
 - `tomcat_install_path`: /opt   
 Location in which tomcat will be installed. Default is "/opt".
 - JVM memory management:   
