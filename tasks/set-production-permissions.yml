@@ -40,6 +40,7 @@
   find:
     paths: "{{ tomcat_install_path }}/apache-tomcat-{{ tomcat_version }}"
     file_type: directory
+    recurse: true
   register: find_result_folders
 
 - name: Set directories permissions for production installation
@@ -52,6 +53,8 @@
   find:
     paths: "{{ tomcat_install_path }}/apache-tomcat-{{ tomcat_version }}"
     file_type: file
+    recurse: true
+    excludes: '*.sh'  # don't change permissions for shell scripts
   register: find_result_files
 
 - name: Set files permissions for production installation
