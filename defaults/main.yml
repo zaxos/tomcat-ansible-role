@@ -31,6 +31,7 @@ tomcat_allow_host_manager_access_only_from_localhost: False
 
 tomcat_debug_mode: False
 
+tomcat_listen_address: 0.0.0.0
 tomcat_port_shutdown: 8005
 tomcat_port_connector: 8080
 tomcat_port_redirect: 8443
