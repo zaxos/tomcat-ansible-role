@@ -27,6 +27,7 @@ Example Playbook
 ----------------
 ```yaml
 - hosts: servers
+  become: true
   vars:
     tomcat_version: 8.5.23
     
