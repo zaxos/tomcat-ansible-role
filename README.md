@@ -93,6 +93,7 @@ Some defaults (probably not requiring tampering):
 - `tomcat_downloadURL`: https://<i></i>archive.apache.org/dist
 - `tomcat_user`: tomcat
 - `tomcat_group`: tomcat
+- `tomcat_listen_address`: 0.0.0.0
 - `tomcat_temp_download_path`: /tmp/ansibletomcattempdir
 
 Optional variables (by default undefined):
