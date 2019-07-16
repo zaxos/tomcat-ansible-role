@@ -41,7 +41,12 @@
   register: find_chmod_result
   changed_when: 'find_chmod_result.stdout | length > 0'
 
-- name: Set files permissions for production installation
+- name: Set files permissions for production installation (1/2)
   command: find {{ tomcat_install_path }}/apache-tomcat-{{ tomcat_version }} -type f -not -name "*.sh" -exec chmod -c 0640 {} \;
+  register: find_chmod_result
+  changed_when: 'find_chmod_result.stdout | length > 0'
+
+- name: Set files permissions for production installation (2/2)
+  command: find {{ tomcat_install_path }}/apache-tomcat-{{ tomcat_version }} -type f -name "*.sh" -exec chmod -c 0740 {} \;
   register: find_chmod_result
   changed_when: 'find_chmod_result.stdout | length > 0'
