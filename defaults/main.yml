@@ -3,6 +3,7 @@
 
 tomcat_state: present
 
+tomcat_version: 8.5.42
 tomcat_major_version: "{{ tomcat_version.split('.')[0].tomcat_version.split('.')[1] }}"
 
 tomcat_install_java: True

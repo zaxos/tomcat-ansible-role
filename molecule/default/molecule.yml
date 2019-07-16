@@ -1,0 +1,33 @@
+---
+dependency:
+  name: galaxy
+driver:
+  name: docker
+lint:
+  name: yamllint
+platforms:
+  - name: centos7-systemd-docker
+    image: centos/systemd
+    # image: retr0h/centos7-systemd-ansible:latest
+    # image: centos:7
+    privileged: true
+    command: /usr/sbin/init
+    # volumes:
+    #   - /sys/fs/cgroup:/sys/fs/cgroup:ro
+provisioner:
+  name: ansible
+  options:
+    become: true
+  lint:
+    name: ansible-lint
+    options:
+      R: true
+scenario:
+  name: default
+verifier:
+  name: testinfra
+  directory: ../tests
+  options:
+    verbose: true
+  lint:
+    name: flake8
