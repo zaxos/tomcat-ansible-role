@@ -6,7 +6,7 @@
     name: "{{ item.package }}"
     state: present
   with_items: "{{ tomcat_java_packages_EL }}"
-  when: tomcat_install_java
+  when: tomcat_install_java|bool
 
 - name: Check if tomcat is already installed
   stat:
