@@ -36,29 +36,12 @@
     group: "{{ tomcat_group }}"
     recurse: yes
 
-- name: Find all subfolders in the tomcat install folder
-  find:
-    paths: "{{ tomcat_install_path }}/apache-tomcat-{{ tomcat_version }}"
-    file_type: directory
-    recurse: true
-  register: find_result_folders
-
 - name: Set directories permissions for production installation
-  file:
-    path: "{{ item.path }}"
-    mode: '0750'
-  loop: "{{ find_result_folders.files }}"
-
-- name: Find all regular files (not folders) in the tomcat install folder
-  find:
-    paths: "{{ tomcat_install_path }}/apache-tomcat-{{ tomcat_version }}"
-    file_type: file
-    recurse: true
-    excludes: '*.sh'  # don't change permissions for shell scripts
-  register: find_result_files
+  command: find {{ tomcat_install_path }}/apache-tomcat-{{ tomcat_version }} -type d -exec chmod -c 2750 {} \;
+  register: find_chmod_result
+  changed_when: 'find_chmod_result.stdout | length > 0'
 
 - name: Set files permissions for production installation
-  file:
-    path: "{{ item.path }}"
-    mode: '0640'
-  loop: "{{ find_result_files.files }}"
+  command: find {{ tomcat_install_path }}/apache-tomcat-{{ tomcat_version }} -type f -not -name "*.sh" -exec chmod -c 0640 {} \;
+  register: find_chmod_result
+  changed_when: 'find_chmod_result.stdout | length > 0'
