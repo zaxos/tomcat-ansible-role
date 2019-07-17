@@ -45,6 +45,12 @@ tomcat_users: []
 
 tomcat_user_roles: []
 
+tomcat_template_manager_context: "manager-context.xml.j2"
+tomcat_template_host_manager_context: "host-manager-context.xml.j2"
+tomcat_template_systemd_service: "tomcat.service.j2"
+tomcat_template_server: "tomcat-server-{{ '.'.join(tomcat_version.split('.')[:2]) }}.xml.j2"
+tomcat_template_users: "tomcat-users-{{ '.'.join(tomcat_version.split('.')[:2]) }}.xml.j2"
+
 tomcat_temp_download_path: /tmp/ansibletomcattempdir
 
 # Uninstall default parameters

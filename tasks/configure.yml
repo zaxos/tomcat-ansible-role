@@ -3,7 +3,7 @@
 
 - name: Setup server.xml
   template:
-    src: "tomcat-server-{{ '.'.join(tomcat_version.split('.')[:2]) }}.xml.j2"
+    src: "{{ tomcat_template_server }}"
     dest: "{{ tomcat_install_path }}/apache-tomcat-{{ tomcat_version }}/conf/server.xml"
   notify: restart tomcat
 
@@ -15,7 +15,7 @@
 
 - name: Setup tomcat-users.xml
   template:
-    src: "tomcat-users-{{ '.'.join(tomcat_version.split('.')[:2]) }}.xml.j2"
+    src: "{{ tomcat_template_users }}"
     dest: "{{ tomcat_install_path }}/apache-tomcat-{{ tomcat_version }}/conf/tomcat-users.xml"
   notify: restart tomcat
 
@@ -27,13 +27,13 @@
 
 - name: Configure access to Manager app (from localhost only or from anywhere)
   template:
-    src: manager-context.xml.j2
+    src: "{{ tomcat_template_manager_context }}"
     dest: "{{ tomcat_install_path }}/apache-tomcat-{{ tomcat_version }}/webapps/manager/META-INF/context.xml"
   notify: restart tomcat
 
 - name: Configure access to Host Manager (from localhost only or from anywhere)
   template:
-    src: host-manager-context.xml.j2
+    src: "{{ tomcat_template_host_manager_context }}"
     dest: "{{ tomcat_install_path }}/apache-tomcat-{{ tomcat_version }}/webapps/host-manager/META-INF/context.xml"
   notify: restart tomcat
 
@@ -51,7 +51,7 @@
 
 - name: Configure service file {{ tomcat_service_name }}.service
   template:
-    src: tomcat.service.j2
+    src: "{{ tomcat_template_systemd_service }}"
     dest: /usr/lib/systemd/system/{{ tomcat_service_name }}.service
   notify: restart tomcat
 
