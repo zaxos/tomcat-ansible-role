@@ -97,6 +97,14 @@ Some defaults (probably not requiring tampering):
 - `tomcat_listen_address`: 0.0.0.0
 - `tomcat_temp_download_path`: /tmp/ansibletomcattempdir
 
+Custom templates for server.xml, users.xml, systemd service file, etc.:
+- In case the default templates don't suit your needs, you can use your own custom templates by changing the following variables:
+  * `tomcat_template_server`
+  * `tomcat_template_users`
+  * `tomcat_template_systemd_service`
+  * `tomcat_template_manager_context`
+  * `tomcat_template_host_manager_context`
+
 Optional variables (by default undefined):
 - You can set custom user uid and group gid for homogeneity across multiple servers. For example:
   * `tomcat_user_uid`: 500
