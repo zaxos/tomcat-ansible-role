@@ -26,6 +26,13 @@ tomcat_jvm_memory_percentage_xmx: 55
 tomcat_permissions_production: False
 tomcat_webapps_auto_deployment: True
 tomcat_permissions_ensure_on_every_run: True
+tomcat_prod_modes:
+  - ['bin', '2750']
+  - ['conf','2750']
+  - ['lib', '2750']
+  - ['logs','2730']
+  - ['temp','0750']
+  - ['work','0750']
 
 tomcat_allow_manager_access_only_from_localhost: False
 tomcat_allow_host_manager_access_only_from_localhost: False
