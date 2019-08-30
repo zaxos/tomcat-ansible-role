@@ -17,7 +17,6 @@
     - bin
     - conf
     - lib
-    - logs
 
 - name: Set recursively directories owner/group for production installation
   file:
@@ -28,6 +27,7 @@
   with_items:
     - temp
     - work
+    - logs
 
 - name: Set recursively webapps directory owner/group for production installation
   file:
@@ -43,12 +43,14 @@
   with_nested:
     - "{{ tomcat_prod_modes }}"
 
-- name: Set files permissions for production installation (1/2)
-  command: find {{ tomcat_install_path }}/apache-tomcat-{{ tomcat_version }} -type f -not -name "*.sh" -exec chmod -c 0640 {} \;
+- name: Set files permissions for production installation
+  command: find {{ tomcat_install_path }}/apache-tomcat-{{ tomcat_version }}/{{ item.0 }} -type f -not -wholename "{{ tomcat_install_path }}/apache-tomcat-{{ tomcat_version }}/bin/*.sh" -exec chmod -c {{ item.2 }} {} \;
   register: find_chmod_result
   changed_when: 'find_chmod_result.stdout | length > 0'
+  with_nested:
+    - "{{ tomcat_prod_modes }}"
 
-- name: Set files permissions for production installation (2/2)
-  command: find {{ tomcat_install_path }}/apache-tomcat-{{ tomcat_version }} -type f -name "*.sh" -exec chmod -c 0750 {} \;
+- name: "Set bin/*.sh permissions to allow execution"
+  command: find {{ tomcat_install_path }}/apache-tomcat-{{ tomcat_version }}/bin -type f -name "*.sh" -exec chmod -c 0750 {} \;
   register: find_chmod_result
   changed_when: 'find_chmod_result.stdout | length > 0'
