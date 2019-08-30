@@ -85,7 +85,7 @@ Lists Tomcat subdirectories, directory modes and file modes respectivly. Permiss
 - ['bin', '2750','0640']
 - ['conf','2750','0640']
 - ['lib', '2750','0640']
-- ['logs','2730','0640']
+- ['logs','0300','0640']
 - ['temp','0750','0640']
 - ['work','0750','0640']
 - ['webapps','0750','0640']
