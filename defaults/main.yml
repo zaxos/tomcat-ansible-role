@@ -53,6 +53,9 @@ tomcat_template_users: "tomcat-users-{{ '.'.join(tomcat_version.split('.')[:2]) 
 
 tomcat_temp_download_path: /tmp/ansibletomcattempdir
 
+# Disconnected remote parameters
+tomcat_remote_is_disconnected:  False
+
 # Uninstall default parameters
 tomcat_uninstall_create_backup: True
 
