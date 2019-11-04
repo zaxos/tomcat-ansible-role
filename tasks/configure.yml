@@ -49,14 +49,24 @@
     (tomcat_installed is changed or tomcat_permissions_ensure_on_every_run) and
     not tomcat_permissions_production
 
-- name: Configure service file {{ tomcat_service_name }}.service
-  template:
-    src: "{{ tomcat_template_systemd_service }}"
-    dest: /usr/lib/systemd/system/{{ tomcat_service_name }}.service
-  notify: restart tomcat
+# Issue #6 - Role assumes services live in /usr/lib/systemd
+# 0 = Exists, 1 = Does Not Exist
+- name: 'test if /usr/lib/systemd/system/ directory exists'
+  shell: 'test -d /usr/lib/systemd/system/; echo $?'
+  register: svc_path_exists
 
-- name: Enable tomcat service on startup
-  systemd:
-    name: "{{ tomcat_service_name }}"
-    enabled: "{% if tomcat_service_enabled_on_startup %}yes{% else %}no{% endif %}"
-    daemon_reload: yes
+- block:
+
+    - name: Configure service file {{ tomcat_service_name }}.service
+      template:
+        src: tomcat.service.j2
+        dest: /usr/lib/systemd/system/{{ tomcat_service_name }}.service
+      notify: restart tomcat
+
+    - name: Enable tomcat service on startup
+      systemd:
+        name: "{{ tomcat_service_name }}"
+        enabled: "{% if tomcat_service_enabled_on_startup %}yes{% else %}no{% endif %}"
+        daemon_reload: yes
+
+  when: svc_path_exists.stdout == "0"
