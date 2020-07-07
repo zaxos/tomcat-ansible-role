@@ -52,7 +52,13 @@
 - name: Configure service file {{ tomcat_service_name }}.service
   template:
     src: "{{ tomcat_template_systemd_service }}"
-    dest: /usr/lib/systemd/system/{{ tomcat_service_name }}.service
+    dest: "{{ tomcat_systemd_config_path }}/{{ tomcat_service_name }}.service"
+  notify: restart tomcat
+
+- name: Configure setenv.sh
+  template:
+    src: "{{ tomcat_template_setenv }}"
+    dest: "{{ tomcat_install_path }}/{{ tomcat_service_name }}/bin/setenv.sh"
   notify: restart tomcat
 
 - name: Enable tomcat service on startup

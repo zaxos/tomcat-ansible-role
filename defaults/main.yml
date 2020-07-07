@@ -20,6 +20,7 @@ tomcat_group: tomcat
 
 tomcat_install_path: /opt
 tomcat_service_name: tomcat
+tomcat_systemd_config_path: /etc/systemd/system/
 tomcat_jvm_memory_percentage_xms: 15
 tomcat_jvm_memory_percentage_xmx: 55
 
@@ -48,6 +49,7 @@ tomcat_user_roles: []
 tomcat_template_manager_context: "manager-context.xml.j2"
 tomcat_template_host_manager_context: "host-manager-context.xml.j2"
 tomcat_template_systemd_service: "tomcat.service.j2"
+tomcat_template_setenv: "tomcat.setenv.sh.j2"
 tomcat_template_server: "tomcat-server-{{ '.'.join(tomcat_version.split('.')[:2]) }}.xml.j2"
 tomcat_template_users: "tomcat-users-{{ '.'.join(tomcat_version.split('.')[:2]) }}.xml.j2"
 

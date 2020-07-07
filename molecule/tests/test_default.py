@@ -7,12 +7,12 @@ testinfra_hosts = testinfra.utils.ansible_runner.AnsibleRunner(
 
 
 def test_tomcat_systemd_file(host):
-    f = host.file('/usr/lib/systemd/system/tomcat.service')
+    f = host.file('/etc/systemd/system/tomcat.service')
     assert f.exists
     assert f.is_file
     assert f.user == 'root'
     assert f.group == 'root'
-    assert f.contains('JAVA_HOME')
+    assert f.contains('CATALINA_HOME')
 
 
 def test_opt_tomcat(host):
