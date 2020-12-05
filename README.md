@@ -15,7 +15,7 @@ Requirements
   * 8.0
   * 8.5
   * 9.0 (9.0.1 or later)
-* CentOS/RHEL 7
+* CentOS/RHEL 7 or 8
 * SELinux disabled
 
 Installation
