@@ -3,7 +3,7 @@
 
 - name: (uninstall) Check if tomcat service is installed
   stat:
-    path: /usr/lib/systemd/system/{{ tomcat_service_name }}.service
+    path: "{{ tomcat_systemd_config_path }}/{{ tomcat_service_name }}.service"
   register: service_installed
 
 - name: (uninstall) Stop tomcat service if running
@@ -15,7 +15,7 @@
 
 - name: (uninstall) Remove service file {{ tomcat_service_name }}.service
   file:
-    path: /usr/lib/systemd/system/{{ tomcat_service_name }}.service
+    path: "{{ tomcat_systemd_config_path }}/{{ tomcat_service_name }}.service"
     state: absent
 
 - name: (uninstall) Perform systemctl daemon-reload
