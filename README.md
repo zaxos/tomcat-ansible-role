@@ -83,13 +83,13 @@ If set to "True", file permissions are ensured on every playbook run. If set to 
 - `tomcat_prod_modes`:  
 Lists Tomcat subdirectories, directory modes and file modes respectively. Permissions applied recursively.
 ```
-- ['bin', '2750','0640']
-- ['conf','2750','0640']
-- ['lib', '2750','0640']
-- ['logs','0300','0640']
-- ['temp','0750','0640']
-- ['work','0750','0640']
-- ['webapps','0750','0640']
+- ['bin', '2750', '0640']
+- ['conf', '2750', '0640']
+- ['lib', '2750', '0640']
+- ['logs', '0300', '0640']
+- ['temp', '0750', '0640']
+- ['work', '0750', '0640']
+- ['webapps', '0750', '0640']
 ```
 
 Tomcat ports:
