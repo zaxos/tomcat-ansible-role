@@ -1,3 +1,4 @@
+
 [![Build Status](https://travis-ci.org/zaxos/tomcat-ansible-role.svg?branch=master)](https://travis-ci.org/zaxos/tomcat-ansible-role)
 [![Ansible Galaxy](https://img.shields.io/badge/galaxy-_zaxos.tomcat--ansible--role-blue.svg)](https://galaxy.ansible.com/zaxos/tomcat-ansible-role/)
 
@@ -87,6 +88,16 @@ Tomcat ports:
 - `tomcat_port_ajp`: 8009
 - `tomcat_port_debug`: 8000
 
+Tomcat AJP:
+- `tomcat_ajp_enabled`: False  
+Set to "True" to enable AJP Connector.
+- `tomcat_ajp_listen_address`: "::1"  
+By default, the connector will listen on the loopback address. Unless the JVM is configured otherwise using system properties, the Java based connectors (NIO, NIO2) will listen on both IPv4 and IPv6 addresses when configured with either "0.0.0.0" or "::". The APR/native connector will only listen on IPv4 addresses if configured with "0.0.0.0" and will listen on IPv6 addresses (and optionally IPv4 addresses depending on the setting of ipv6v6only) if configured with "::".
+- `tomcat_ajp_secret`: "my-@jp-s3cr3t"  
+This attribute must be specified with a non-null, non-zero length value unless "secretRequired" is explicitly configured to be "false". Please change the default value to something secure.
+- `tomcat_ajp_secret_required`: True  
+Set to "False" to configure "secretRequired=False".
+
 Some defaults (probably not requiring tampering):
 - `tomcat_service_name`: tomcat
 - `tomcat_service_enabled_on_startup`: True
@@ -126,6 +137,5 @@ Change it to "True" to uninstall Java after tomcat is uninstalled.
 In order to override the above values and uninstall everything, set it to "True".
 
 Variables for Disconnected remote environment:
-- `tomcat_remote_is_disconnected`: False
-Change it to "True" if your remote host (managed host) is offline and cannot access internet. 
-
+- `tomcat_remote_is_disconnected`: False  
+Change it to "True" if your remote host (managed host) is offline and cannot access internet.
