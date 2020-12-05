@@ -37,6 +37,12 @@
     dest: "{{ tomcat_install_path }}/apache-tomcat-{{ tomcat_version }}/webapps/host-manager/META-INF/context.xml"
   notify: restart tomcat
 
+- name: Configure setenv.sh
+  template:
+    src: "{{ tomcat_template_setenv }}"
+    dest: "{{ tomcat_install_path }}/{{ tomcat_service_name }}/bin/setenv.sh"
+  notify: restart tomcat
+
 - name: Set production permissions
   include: set-production-permissions.yml
   when: >
@@ -55,11 +61,11 @@
     dest: "{{ tomcat_systemd_config_path }}/{{ tomcat_service_name }}.service"
   notify: restart tomcat
 
-- name: Configure setenv.sh
-  template:
-    src: "{{ tomcat_template_setenv }}"
-    dest: "{{ tomcat_install_path }}/{{ tomcat_service_name }}/bin/setenv.sh"
-  notify: restart tomcat
+- name: Remove systemd service file from old path (before role update)
+  file:
+    path: /usr/lib/systemd/system/{{ tomcat_service_name }}.service
+    state: absent
+  when: tomcat_delete_old_systemd_service_file
 
 - name: Enable tomcat service on startup
   systemd:
