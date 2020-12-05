@@ -121,11 +121,19 @@
     -->
 
 {% if tomcat_ajp_enabled  %}
+{% if tomcat_ajp_secret_required  %}
     <Connector protocol="AJP/1.3"
-               address="::1"
+               address="{{ tomcat_ajp_listen_address }}"
                port="{{ tomcat_port_ajp }}"
                redirectPort="{{ tomcat_port_redirect }}"
                secret="{{ tomcat_ajp_secret }}" />
+{% else %}
+    <Connector protocol="AJP/1.3"
+               address="{{ tomcat_ajp_listen_address }}"
+               port="{{ tomcat_port_ajp }}"
+               redirectPort="{{ tomcat_port_redirect }}"
+               secretRequired="false" />
+{% endif %}
 {% endif %}
 
     <!-- An Engine represents the entry point (within Catalina) that processes

@@ -41,7 +41,9 @@ tomcat_port_ajp: 8009
 tomcat_port_debug: 8000
 
 tomcat_ajp_enabled: False
+tomcat_ajp_listen_address: "::1" 
 tomcat_ajp_secret: "my-@jp-s3cr3t"
+tomcat_ajp_secret_required: True
 
 tomcat_service_enabled_on_startup: True
 
