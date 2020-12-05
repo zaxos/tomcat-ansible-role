@@ -122,3 +122,8 @@ Change it to "True" to uninstall Java after tomcat is uninstalled.
   * `tomcat_uninstall_remove_group`: True
 - `tomcat_uninstall_remove_all`: False   
 In order to override the above values and uninstall everything, set it to "True".
+
+Variables for Disconnected remote environment:
+- `tomcat_remote_is_disconnected`: False
+Change it to "True" if your remote host (managed host) is offline and cannot access internet. 
+

@@ -30,15 +30,28 @@
   file:
     path: '{{ tomcat_temp_download_path }}'
     state: directory
+  delegate_to: "{{ item }}"
+  loop:
+  - localhost
+  - "{{ inventory_hostname }}"
   changed_when: False
-  when: not is_installed.stat.exists
+  when: >
+    not is_installed.stat.exists and
+    (( item == inventory_hostname ) or tomcat_remote_is_disconnected )
 
 - name: Download apache-tomcat-{{ tomcat_version }}.tar.gz
   get_url:
     url: "{{ tomcat_downloadURL }}/tomcat/tomcat-{{ tomcat_version.split('.')[0] }}/v{{ tomcat_version }}/bin/apache-tomcat-{{ tomcat_version }}.tar.gz"
     dest: '{{ tomcat_temp_download_path }}'
     timeout: 120
+  delegate_to: "{{ 'localhost' if tomcat_remote_is_disconnected else inventory_hostname }}"
   when: not is_installed.stat.exists
+
+- name: apache-tomcat-{{ tomcat_version }}.tar.gz is transfered to the disconnected remote
+  copy:
+    src: "{{ tomcat_temp_download_path }}/apache-tomcat-{{ tomcat_version }}.tar.gz"
+    dest: "{{ tomcat_temp_download_path }}"
+  when: tomcat_remote_is_disconnected
 
 - name: Unarchive apache-tomcat-{{ tomcat_version }}.tar.gz at {{ tomcat_install_path }}
   unarchive:
