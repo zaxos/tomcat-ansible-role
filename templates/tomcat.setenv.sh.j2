@@ -1,0 +1,4 @@
+JAVA_HOME={{ tomcat_java_home }}
+JAVA_OPTS="-Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom"
+CATALINA_OPTS="-Xms{{ tomcat_jvm_memory_percentage_xms*ansible_memtotal_mb//100 }}M -Xmx{{ tomcat_jvm_memory_percentage_xmx*ansible_memtotal_mb//100 }}M -server -XX:+UseParallelGC {% if tomcat_debug_mode == True %}-Xdebug -Xrunjdwp:transport=dt_socket,address={{ tomcat_port_debug }},server=y,suspend=n{% endif %}"
+CATALINA_PID="{{ tomcat_install_path }}/{{ tomcat_service_name }}/temp/tomcat.pid"
