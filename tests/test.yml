@@ -10,5 +10,4 @@
   vars:
     tomcat_remote_is_disconnected: True
   roles:
-    - tomcat-ansible-role  
-  
+    - tomcat-ansible-role

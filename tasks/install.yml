@@ -32,8 +32,8 @@
     state: directory
   delegate_to: "{{ item }}"
   loop:
-  - localhost
-  - "{{ inventory_hostname }}"
+    - localhost
+    - "{{ inventory_hostname }}"
   changed_when: False
   when: >
     not is_installed.stat.exists and
